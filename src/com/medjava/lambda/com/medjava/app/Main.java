@@ -1,8 +1,15 @@
 package com.medjava.lambda.com.medjava.app;
 
+
 import com.medjava.lambda.model.Alumno;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.*;
 
 public class Main {
 
@@ -24,6 +31,57 @@ public class Main {
     listaAlumnos.add(new Alumno(13, "1717913851", "Julio Cesar", "González Castaño", "C Sharp", 10, 22));
     listaAlumnos.add(new Alumno(14, "1717986531", "Gloria Amparo", "Rodas Monsalve", "Ruby", 7, 18));
     listaAlumnos.add(new Alumno(15, "1717975232", "Gabriel Jaime", "Jiménez Gómez", "Java Script", 10, 18));
+    System.out.println("----------------------------------------");
+    listaAlumnos.stream()
+            .filter(x->x.getNota()>9)
+            .filter(x->x.getNombreCurso().equalsIgnoreCase("PHP"))
+            .forEach(System.out::println);
+    System.out.println("----------------------------------------");
+    //primeros dos alumnos
+    listaAlumnos.stream()
+            .limit(2)
+            .forEach(System.out::println);
+    System.out.println("----------------------------------------");
+    //primeros dos alumnos
+    Comparator<Alumno> comp =Comparator.comparingInt(Alumno::getEdad); // turns to lambda if comparator is funnctional interface
+
+    listaAlumnos.stream()
+            .collect(minBy(comp)) //apply comparator
+            .ifPresent(System.out::println); // print if find domethin
+
+    System.out.println("----------------------------------------");
+    //
+    listaAlumnos.stream()
+                .map(Alumno::getNombreCurso)
+                .filter(x->x.endsWith("t"))
+                .forEach(System.out::println);
+
+    //Ordenamiento de los alumnos por not
+    listaAlumnos.stream()
+            .sorted(comparing(Alumno::getNota))
+            .forEach(System.out::println);
+    System.out.println("----------------------------------------");
+    listaAlumnos.stream()
+            .sorted(comparing(Alumno::getNota).reversed())
+            .forEach(System.out::println);
+
+    System.out.println("----------------------------------------");
+    System.out.println("----------------------------------------");
+    System.out.println(listaAlumnos.stream().collect(groupingBy(Alumno::getNombreCurso)));
+    System.out.println("----------------------------------------");
+    System.out.println("----------------------------------------");
+    listaAlumnos.stream().filter(x->x.getNombres().length()>10).forEach(System.out::println);;
+
+
+    String[][] dataArray = new String[][]{{"a", "b"},
+            {"c", "d"}, {"e", "f"}, {"g", "h"}};
+
+    Arrays.stream(dataArray).flatMap(x->Arrays.stream(x))
+    .forEach(System.out::println);
+
+    System.out.println(Arrays.stream(dataArray)
+            .map(x->x.)
+            .collect(joining(", ")));
 
   }
 }
